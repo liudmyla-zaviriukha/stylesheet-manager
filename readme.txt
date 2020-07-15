@@ -3,8 +3,7 @@ Contributors: liudmyla-zaviriukha
 Author URI: https://github.com/liudmyla-zaviriukha
 Plugin URL: https://github.com/liudmyla-zaviriukha/stylesheet-manager
 
-A tool for experienced frontend performance engineers to take control over the scripts and styles enqueued on their site.
-
+WP plugin for front-end devs to take control of all styles enqueued on their site and allows to print inline them in head section of the document (only for not logged in users).
 == Description ==
 
 This tool allows you to print selected stylesheets to inline styles.
