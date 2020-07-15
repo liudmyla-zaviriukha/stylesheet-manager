@@ -316,15 +316,20 @@ class smInit {
 	                preg_match('/\((.*?)\)/', $url, $font_src);
                 }
 
+
 				$font_src = str_replace('\'','', $font_src[1]);
 				$font_src = str_replace('..','', $font_src);
-				$font_url = $this->get_file_url($font_src);
 
-				$font_family = str_replace( "'", "", $font_family[2]);
-				$font_family = str_replace("\"", "", $font_family);
-				$font_family = trim( stripslashes($font_family) );
+				if(!empty($font_src)) {
 
-				$this->insert_font_link($font_family, $font_url);
+					$font_url = $this->get_file_url( $font_src );
+
+					$font_family = str_replace( "'", "", $font_family[2] );
+					$font_family = str_replace( "\"", "", $font_family );
+					$font_family = trim( stripslashes( $font_family ) );
+
+					$this->insert_font_link( $font_family, $font_url );
+				}
 			}
         }
 
@@ -332,6 +337,7 @@ class smInit {
 	}
 
 	public function get_file_url($src){
+
         $path = '';
 
 		// Get all files in current theme directory
