@@ -472,7 +472,7 @@ class smInit {
 				),
 			),
 			'self'		=> array(
-				'msg'		=> __( 'This asset is loaded by Stylesheet Manager. It will only be loaded for admin users and dequeuing it will prevent you from managing other assets.', 'stylesheet-manager' ),
+				'msg'		=> __( 'This asset is loaded by Stylesheet Manager. It will only be loaded for admin users.', 'stylesheet-manager' ),
 				'handles'	=> array(
 					'stylesheet-manager',
 				)
