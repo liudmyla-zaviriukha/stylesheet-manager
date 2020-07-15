@@ -235,10 +235,6 @@ class smInit {
 	 * @since 0.0.1
 	 */
 	public function store_head_assets() {
-
-		global $wp_scripts;
-		$this->store_asset_list( $wp_scripts->done, $wp_scripts->registered, 'head', 'scripts' );
-
 		global $wp_styles;
 		$this->store_asset_list( $wp_styles->done, $wp_styles->registered, 'head', 'styles' );
 	}
@@ -248,10 +244,6 @@ class smInit {
 	 * @since 0.0.1
 	 */
 	public function store_footer_assets() {
-
-		global $wp_scripts;
-		$this->store_asset_list( $wp_scripts->done, $wp_scripts->registered, 'footer', 'scripts' );
-
 		global $wp_styles;
 		$this->store_asset_list( $wp_styles->done, $wp_styles->registered, 'footer', 'styles' );
 	}
@@ -282,7 +274,15 @@ class smInit {
 			foreach( $this->assets['dequeued']['styles'] as $handle => $asset ) {
 
 				if( !is_user_logged_in() ) {
-					$css_content = $this->get_local_fonts($asset['src']);
+
+				    //Check asset src
+                    $src = $asset['src'];
+					$parsed_url = parse_url($src);
+
+					if(!$parsed_url['scheme'])
+						$src = get_site_url() . $src;
+
+					$css_content = $this->get_local_fonts($src);
 
 					wp_deregister_style( $handle );
 
@@ -295,7 +295,7 @@ class smInit {
 	}
 
 	public function get_local_fonts($src) {
-		$content = @file_get_contents($src);
+		$content = file_get_contents($src);
 
 		// find all @font-face
         $font_faces = preg_match_all('/(\@font-face)([^}]+)(\})/', $content, $matches);
@@ -456,7 +456,7 @@ class smInit {
 
 		$notices = array(
 			'core'	=> array(
-				'msg'		=> __( 'This asset is part of WordPress core. Dequeuing this asset could cause serious problems, including breaking the admin bar.', 'stylesheet-manager' ),
+				'msg'		=> __( 'This asset is part of WordPress core.', 'stylesheet-manager' ),
 				'handles'	=> array(
 					'jquery',
 					'jquery-core',
@@ -464,7 +464,7 @@ class smInit {
 				),
 			),
 			'adminbar'	=> array(
-				'msg'		=> __( 'This asset is commonly loaded with the admin bar for logged in users. It may not be loaded when logged-out users visit this page. Dequeuing this asset could break the admin bar, including this asset manager.', 'stylesheet-manager' ),
+				'msg'		=> __( 'This asset is commonly loaded with the admin bar for logged in users. It may not be loaded when logged-out users visit this page.', 'stylesheet-manager' ),
 				'handles'	=> array(
 					'open-sans',
 					'dashicons',
@@ -505,19 +505,18 @@ class smInit {
 		if ( !check_ajax_referer( 'stylesheet-manager', 'nonce' ) ||  !is_super_admin() ) {
 			$this->ajax_nopriv_default();
 		}
-
 		if ( empty( $_POST['handle'] ) || empty( $_POST['type'] ) || empty( $_POST['asset_data'] ) ) {
 			wp_send_json_error(
 				array(
 					'error' => 'noasset',
-					'msg' => __( 'There was an error with this dequeue request. No asset information was passed.', 'stylesheet-manager' ),
+					'msg' => __( 'There was an error with this print request. No asset information was passed.', 'stylesheet-manager' ),
 					'post'	=> $_POST
 				)
 			);
 		}
 
 
-		if ( $_POST['type'] !== 'scripts' && $_POST['type'] !== 'styles' ) {
+		if ( $_POST['type'] !== 'styles' ) {
 			wp_send_json_error(
 				array(
 					'error' => 'badtype',

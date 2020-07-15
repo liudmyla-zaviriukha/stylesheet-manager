@@ -29,7 +29,6 @@ jQuery(document).ready(function ($) {
 					'<h3>Please select styles which you want to display as inline styles in head section</h3>' +
 					'<h5>* In this case all @font-face will be replaced with link tag</h5>' +
 
-
 					'<div class="section head styles"></div>' +
 					'<div class="section footer styles"></div>' +
 
@@ -49,7 +48,11 @@ jQuery(document).ready(function ($) {
 
 				$.each(loc, function(type_key, type){
 					$.each(type, function(key, asset){
-						self.appendAsset(asset, loc_key, type_key );
+						if( asset.handle != 'admin-bar' &&
+							asset.handle != 'dashicons' &&
+							asset.handle != 'stylesheet-manager'
+						)
+							self.appendAsset(asset, loc_key, type_key );
 					});
 				});
 			});
@@ -111,10 +114,6 @@ jQuery(document).ready(function ($) {
 
 			var cur = this.el.find( '.asset.handle-' + asset.handle.replace(/\./g, "\\.") + '.' + type );
 
-			// Register click function to open/close asset panel
-			/*cur.click( function() {
-				smPanel.toggleAsset( $(this) );
-			});*/
 
 			// Register click function to select all in disabled source input field
 			this.enableSrcSelect( cur.find( '.src_input input' ) );
@@ -189,16 +188,6 @@ jQuery(document).ready(function ($) {
 				this.el.addClass( 'open' );
 				this.menu_el.addClass( 'open' );
 				this.el.slideDown();
-			}
-		},
-
-		// Open/close an asset panel
-		toggleAsset : function( asset ) {
-
-			if ( asset.hasClass( 'open' ) ) {
-				asset.removeClass( 'open' );
-			} else {
-				asset.addClass( 'open' );
 			}
 		},
 
