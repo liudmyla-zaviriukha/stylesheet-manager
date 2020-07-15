@@ -27,7 +27,7 @@ jQuery(document).ready(function ($) {
 			this.el.html(
 				'<div class="column-section">' +
 					'<h3>Please select styles which you want to display as inline styles in head section</h3>' +
-					'<h5>* In this case all @font-face will be replaced with link tag</h5>' +
+					'<h5>* In this case all @font-face will be cut from selected assets and inserted as link tag with preload attribute</h5>' +
 
 					'<div class="section head styles"></div>' +
 					'<div class="section footer styles"></div>' +
